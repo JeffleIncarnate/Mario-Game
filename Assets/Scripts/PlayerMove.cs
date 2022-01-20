@@ -4,19 +4,28 @@ using UnityEngine;
 
 public class PlayerMove : MonoBehaviour
 {
-    public Rigidbody2D rb2D;
+    public CharacterController2D controller;
+    public float runSpeed;
+    float horizontalMovement = 0f;
+    bool jump = false;
+    bool crouch = false;
 
-    // Update is called once per frame
-    void Update()
+    // Update to check if we hit these buttons
+    public void Update()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            Debug.Log("Player has pressed up");
-        }
+        // Get input 
+        horizontalMovement = Input.GetAxisRaw("Horizontal") * runSpeed;
 
-        if(Input.GetKey ("down"))
+        // Check if we Jump
+        if (Input.GetButtonDown("Jump"))
         {
-            Debug.Log("Player has pressed down");
+            jump = true;
         }
+    }
+
+    public void FixedUpdate()
+    {
+        controller.Move(horizontalMovement * Time.fixedDeltaTime, crouch, jump);
+        jump = false;
     }
 }
